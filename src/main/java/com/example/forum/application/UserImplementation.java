@@ -5,10 +5,12 @@ import com.example.forum.infrastructure.controller.dto.input.UserInputDto;
 import com.example.forum.infrastructure.controller.dto.output.UserOutputDto;
 import com.example.forum.infrastructure.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,10 +33,23 @@ public class UserImplementation implements UserService{
                 new ConcurrentHashMap<>(Map.of("Created!", "The User is successfully created")));
     }
 
+
+
     @Override
     public Optional<Usuario> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+    @Override
+    public List<Usuario> getAllUsuario() throws Exception {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public Usuario getLastUsuario() throws Exception {
+        return userRepository.findAll(Sort.by("id").descending()).get(0);
+    }
+
     public Usuario FormQuestionInputDtoToEntity(UserInputDto userInputDto) {
         Usuario usuario = new Usuario();
         usuario.setName(userInputDto.getName());
